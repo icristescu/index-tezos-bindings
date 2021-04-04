@@ -1,0 +1,13 @@
+(executable
+ (name main)
+ (modules main)
+ (public_name index-tezos)
+ (libraries index index.unix repr encoding fmt logs logs.fmt))
+
+(executable
+ (foreign_stubs
+  (language c)
+  (names pread))
+ (name test_read)
+ (modules test_read)
+ (libraries fmt logs optint unix))
