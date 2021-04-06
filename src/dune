@@ -1,13 +1,7 @@
-(executable
- (name main)
- (modules main)
- (public_name index-tezos)
- (libraries index index.unix repr encoding fmt logs logs.fmt))
-
-(executable
- (foreign_stubs
-  (language c)
-  (names pread))
- (name test_read)
- (modules test_read)
- (libraries fmt logs optint unix))
+(executables
+ (names main json_to_repr bench_trace)
+ (modules main json_to_repr bench_trace)
+ (libraries index index.unix repr ppx_repr encoding fmt logs logs.fmt yojson
+   cmdliner optint)
+ (preprocess
+  (pps ppx_repr ppx_deriving_yojson)))
