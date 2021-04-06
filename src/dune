@@ -2,6 +2,6 @@
  (names main json_to_repr bench_trace)
  (modules main json_to_repr bench_trace)
  (libraries index index.unix repr ppx_repr encoding fmt logs logs.fmt yojson
-   cmdliner optint)
+   cmdliner optint progress progress.unix)
  (preprocess
   (pps ppx_repr ppx_deriving_yojson)))

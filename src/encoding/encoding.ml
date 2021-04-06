@@ -85,8 +85,8 @@ end
 module Int63 = struct
   include Optint.Int63
 
-  let t : t Irmin.Type.t =
-    let open Irmin.Type in
+  let t : t Repr.t =
+    let open Repr in
     (map int64) of_int64 to_int64
     |> like ~pp:Optint.Int63.pp ~equal:(stage Optint.Int63.equal)
          ~compare:(stage Optint.Int63.compare)
@@ -94,7 +94,7 @@ end
 
 type int63 = Int63.t [@@deriving repr]
 
-module Val : Index.Value.S = struct
+module Val = struct
   type t = int63 * int * char [@@deriving repr]
 
   let to_bin_string = Repr.(unstage (to_bin_string (triple int63_t int32 char)))

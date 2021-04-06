@@ -9,6 +9,7 @@ doc: "https://github.com/icristescu/index-tezos.git"
 bug-reports: "https://github.com/icristescu/index-tezos/issues"
 depends: [
   "dune" {>= "2.0"}
+  "optint" {>= "0.1.0"}
 ]
 build: [
   ["dune" "subst"] {pinned}

@@ -29,6 +29,14 @@ module Hash : sig
   val of_string : string -> (t, [ `Msg of string ]) result
 end
 
+module Int63 : sig
+  type t = Optint.Int63.t
+
+  val t : t Repr.t
+end
+
+type int63 = Int63.t [@@deriving repr]
+
 module Key : Index.Key.S with type t = Hash.t
 
-module Val : Index.Value.S
+module Val : Index.Value.S with type t = Int63.t * int * char

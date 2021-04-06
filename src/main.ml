@@ -31,11 +31,8 @@ let v = Index.v ~cache
 let close t = Index.close t
 
 let run_index () =
+  Logs.debug (fun l -> l "open store");
   let index = Index.v ~fresh:false ~readonly:true ~log_size:500_000 root in
-  Logs.debug (fun l -> l "opened store");
-  (* Index.iter (fun k v ->
-       Logs.app (fun l -> l "k = %a v = %a" (Repr.pp Key.t) k (Repr.pp Val.t) v))
-     index;*)
   match Encoding.Hash.of_string target with
   | Error (`Msg m) -> failwith m
   | Ok key ->
@@ -44,7 +41,7 @@ let run_index () =
       close index
 
 let () =
-  Logs.set_level (Some Logs.Debug);
+  Logs.set_level (Some Logs.App);
   Logs.set_reporter (reporter ());
   Printexc.record_backtrace true;
   run_index ()
