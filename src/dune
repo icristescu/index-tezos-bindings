@@ -1,7 +1,7 @@
 (executables
- (names main json_to_repr bench_trace)
- (modules main json_to_repr bench_trace)
+ (names main json_to_repr bench_trace extract_index)
+ (modules main json_to_repr bench_trace extract_index)
  (libraries index index.unix repr ppx_repr encoding fmt logs logs.fmt yojson
-   cmdliner optint progress progress.unix)
+   cmdliner optint progress progress.unix re)
  (preprocess
   (pps ppx_repr ppx_deriving_yojson)))

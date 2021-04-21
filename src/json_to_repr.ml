@@ -41,9 +41,12 @@ module J = struct
   type key = string [@@deriving yojson]
 
   type op =
+    | Clear
     | Flush
     | Mem of key * bool
     | Find of key * bool
+    | Ro_mem of key * bool
+    | Ro_find of key * bool
     | Add of key * (int64 * int * char)
   [@@deriving yojson]
 
@@ -72,17 +75,23 @@ module R = struct
   type key = string [@@deriving repr]
 
   type op =
+    | Clear
     | Flush
     | Mem of key * bool
     | Find of key * bool
+    | Ro_mem of key * bool
+    | Ro_find of key * bool
     | Add of key * (int64 * int * char)
   [@@deriving repr]
 end
 
 let r_of_j = function
+  | J.Clear -> R.Clear
   | J.Flush -> R.Flush
   | J.Mem (k, b) -> R.Mem (k, b)
   | J.Find (k, b) -> R.Find (k, b)
+  | J.Ro_mem (k, b) -> R.Ro_mem (k, b)
+  | J.Ro_find (k, b) -> R.Ro_find (k, b)
   | J.Add (k, v) -> R.Add (k, v)
 
 let _prefix = "/Users/icristes/Documents/index-tezos-bindings"
