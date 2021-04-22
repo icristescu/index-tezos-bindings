@@ -22,9 +22,12 @@ let read_file filename extract run_id =
     close_out oc
 
 let context_lines s =
-  let validated = "\\[index\\]" in
+  let info = "\\[INFO\\]" in
+  let index = "\\[index\\]" in
   try
-    let pos = search_forward (regexp validated) s 0 in
+    let _ = search_forward (regexp info) s 0 in
+    let pos = search_forward (regexp index) s 0 in
+    if not (string_match (regexp "\\[") s (pos + 8)) then raise Not_found;
     let ls = string_after s pos |> split (regexp "[ ]+") in
     (* Fmt.epr "found at pos %d in line %s ls = %a\n" pos s Fmt.(list string) ls; *)
     Some (try List.nth ls 1 with e -> Fmt.epr "Failure in %s" s; raise e)
