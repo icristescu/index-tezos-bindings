@@ -1,6 +1,10 @@
 module Seq = struct
   include Seq
 
+  (* Backported from ocaml 4.11 *)
+  let rec unfold f u () =
+    match f u with None -> Nil | Some (x, u') -> Cons (x, unfold f u')
+
   let mapi f s =
     let i = ref (-1) in
     Seq.map
@@ -34,7 +38,7 @@ module Seq = struct
                 Queue.push v q;
                 aux (Some seq, q)))
     in
-    Seq.unfold aux (Some seq, Queue.create ())
+    unfold aux (Some seq, Queue.create ())
 end
 
 module J = struct

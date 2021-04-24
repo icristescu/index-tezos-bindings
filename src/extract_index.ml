@@ -9,9 +9,13 @@ let run_id =
   let doc = Arg.info ~doc:"Run id." [ "i"; "id" ] in
   Arg.(value @@ opt int 1 doc)
 
-let read_file filename extract run_id =
-  let chan = open_in filename in
-  let oc = open_out (run_id ^ "-index.json") in
+let remove_ro =
+  let doc = Arg.info ~doc:"Remove RO entries" [ "ro" ] in
+  Arg.(value & flag @@ doc)
+
+let read_file infile outfile extract =
+  let chan = open_in infile in
+  let oc = open_out outfile in
   try
     while true do
       let line = input_line chan in
@@ -33,11 +37,22 @@ let context_lines s =
     Some (try List.nth ls 1 with e -> Fmt.epr "Failure in %s" s; raise e)
   with Not_found -> None
 
-let main file run_id =
-  let run_id = Printf.sprintf "%d" run_id in
-  read_file file context_lines run_id
+let remove_lines s =
+  let ro = "Ro_" in
+  try
+    let _ = search_forward (regexp ro) s 0 in
+    None
+  with Not_found -> Some s
 
-let main_term = Term.(const main $ file $ run_id )
+let main file run_id remove_ro =
+  let run_id = Printf.sprintf "%d" run_id in
+  let out_file = "rw_index.json" in
+  if remove_ro then read_file file out_file remove_lines
+  else
+  (let out_file = run_id ^ "-index.json" in
+  read_file file out_file context_lines)
+
+let main_term = Term.(const main $ file $ run_id $ remove_ro)
 
 let () =
   let info = Term.info "Extract from the logs of a tezos node" in
